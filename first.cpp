@@ -63,7 +63,7 @@ void List :: Show(int size){    //method of displaying list items
     }
 }
 
-void List:: Ready_List(){ //здесь у мен€ будет проходить считывание из файла
+void List:: Ready_List(){ //here I will enter the reading list from external file
 
 
 }
