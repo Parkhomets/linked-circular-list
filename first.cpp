@@ -3,59 +3,82 @@
 using namespace std;
 
 struct Node{
-    int x;
+    string Name;
     Node *Next;
 };
 
 class List{
-    Node *Head, *Tail; //первый и последний элементы
-    int size;         //число элементов в списке
-    public:
-      List():Head(NULL),Tail(NULL),size(0){};   //иниц элементов в 0 с помощью конструктора
-      ~List();      //деструктор дл€ освобождени€ пам€ти
-      void Add(int x); //добавление нового элемента
-      void Show(int size);  //отображение элементов списка
-      int Count();          //подсчет элементов в списке
+    Node *Head, *Tail;   //the first and last elements
+    //int size;            //the number of elements in the list
+public:
+    List():Head(NULL),Tail(NULL),size(0){}; //initialize the elements to 0 using the designer
+    ~List();                        //destructor to free memory
+    void Add();                     //method to add item
+    void Show(int size);            //show all items
+    void Ready_List();
+    //int Count();
+    int size;                       //the number of elements in the list
 };
-List::~List(){
+
+List :: ~List(){                    //delete class
     while (size!=0){
-        Node *temp=Head->Next;
-        delete Head; //удаление активного элемента
-        Head = temp; //смена адреса начала на адрес следующего элемента
+        Node *temp = Head->Next;    //select the active item
+        delete Head;                //delete the active item
+        Head = temp;                //displace the pointer
         size--;
     }
 }
 
+/*
 int List :: Count(){
     return size;
 }
-void List :: Add(int x){
-    size++;      //при каждом добавлении размер списка увеличиваетс€
-    Node *temp = new Node; //выделение пам€ти дл€ нового элемента
-    temp->Next = Head; //заммыкание контура
-    temp->x = x; //записываем в выделенную €чейку пам€ти определенное значение значение
-    if (Head!=NULL){  //если список не пустой
-        Tail->Next = temp; //записываем данные в самый конец после посленего элемента
-        Tail = temp; //мещаем наш указатель хвоста на последний элемент
+*/
+
+void List:: Add(){
+    string Name;
+    size++;                     //with each addition, the size of the list increases
+    cin >> Name;                //Enter a new element in a temporary variable
+    Node *temp = new Node;      //allocate memory for the new list node
+    temp->Next = Head;          //short circuit
+    temp->Name = Name;          //the entry of a new element in the active node
+    if (Head!=NULL){            //if list is not empty
+        Tail->Next = temp;      //put the new node at the end
+        Tail = temp;            //Do newly added node active
     }
-    else{  //если список пустой
-        Head = Tail = temp;
+    else{                       //if list is empty
+        Head = Tail = temp;     //the new element becomes the beginning and end, and active, that is the only
     }
 }
-void List :: Show(int size){  //выводим элементы списка
-    Node *tempHead = Head; //указатель показывает на начало списка
-    int temp = size;    //временна€ переменна€ равна€ числу элементов в списке
+
+void List :: Show(int size){    //method of displaying list items
+    Node *tempHead = Head;      //put the pointer to the first element
+    int temp = size;            //set up a temporary variable for convenience of output
+    int counter = 1;
     while (temp!=0){
-        cout<<tempHead->x<<" ";   //выводим очередной элемент на экран
-        tempHead = tempHead->Next;  //указываем на следующий элемент
-        temp--; //элемент считан, значит, осталось на один элемент меньше
+        cout<<counter<<":";
+        cout<<tempHead->Name<<"\n";
+        tempHead = tempHead->Next; //put the pointer to the next element
+        temp--; counter++;         //reduce the counter
     }
 }
+
+void List:: Ready_List(){ //здесь у мен€ будет проходить считывание из файла
+
+
+}
+
 int main(){
     List lst;
-    lst.Add(100);
-    lst.Add(200);
-    lst.Add(300);
-    lst.Show(lst.Count()); //здесь € вывожу весь список на экран
-return 0;
+    int i;
+    cout<<"How many items will contain your list? Enter a number:";
+    cin>>i;
+    while (i!=0){
+        lst.Add();
+        i--;
+    }
+    cout<<"\n\n";
+    lst.Show(lst.size);
+    return 0;
 }
+
