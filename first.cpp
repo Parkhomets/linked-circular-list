@@ -16,7 +16,7 @@ public:
     List():Head(NULL),Tail(NULL),size(0){}; //initialize the elements to 0 using the designer
     ~List();                        //destructor to free memory
     void Add();                     //method to add item
-    void Show(int size);            //show all items
+    void Show();            //show all items
     void Ready_List();
     //int Count();
     int size;                       //the number of elements in the list
@@ -37,10 +37,11 @@ int List :: Count(){
 }
 */
 
-void List:: Add(){
+void List:: Add(){//with each addition, the size of the list increases
     string Name;
-    size++;                     //with each addition, the size of the list increases
-    cin >> Name;                //Enter a new element in a temporary variable
+    size++;
+    getline(cin, Name);
+    //cin>>Name;               //Enter a new element in a temporary variable
     Node *temp = new Node;      //allocate memory for the new list node
     temp->Next = Head;          //short circuit
     temp->Name = Name;          //the entry of a new element in the active node
@@ -53,7 +54,7 @@ void List:: Add(){
     }
 }
 
-void List :: Show(int size){    //method of displaying list items
+void List :: Show(){    //method of displaying list items
     Node *tempHead = Head;      //put the pointer to the first element
     int temp = size;            //set up a temporary variable for convenience of output
     int counter = 1;
@@ -66,7 +67,7 @@ void List :: Show(int size){    //method of displaying list items
 }
 
 void List:: Ready_List(){ //here I will enter the reading list from external file
-    ifstream inFile1("B16505.txt",ios::in);
+    ifstream inFile1("WorkList.txt",ios::in);
     int iter = 0;
     string s;
     while (inFile1.peek() != EOF)
@@ -75,7 +76,7 @@ void List:: Ready_List(){ //here I will enter the reading list from external fil
         iter++;
     }
     inFile1.close();
-    ifstream inFile("B16505.txt",ios::in);
+    ifstream inFile("Worklist.txt",ios::in);
     const int len = 30;
     const char ch = '\n';
     char mass[len][iter];
@@ -104,16 +105,17 @@ void List:: Ready_List(){ //here I will enter the reading list from external fil
 int main(){
     List lst;
     int i;
-    /*cout<<"How many items will contain your list? Enter a number:";
-    cin>>i;
+
+    cout<<"How many items will contain your list? Enter a number:";
+    cin>>i;cin.get();                    //The keyboard buffer is empty symbol, which I removed using cin.get()
     while (i!=0){
         lst.Add();
         i--;
     }
     cout<<"\n\n";
-    lst.Show(lst.size);*/
-    lst.Ready_List();
-    lst.Show(lst.size);
+    lst.Show();
+    /*lst.Ready_List();
+    lst.Show();*/
     return 0;
 }
 
