@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <fstream>
 #include <string>
+#include <cstring>
 using namespace std;
 
 struct Node{
@@ -18,7 +19,7 @@ public:
     void Add();                     //method to add item
     void Show();            //show all items
     void Ready_List();
-    //int Count();
+    void Search();
     int size;                       //the number of elements in the list
 };
 
@@ -56,15 +57,41 @@ void List:: Add(){//with each addition, the size of the list increases
 
 void List :: Show(){    //method of displaying list items
     Node *tempHead = Head;      //put the pointer to the first element
-    int temp = size;            //set up a temporary variable for convenience of output
+    int temp = size;//set up a temporary variable for convenience of output
     int counter = 1;
     while (temp!=0){
-        cout<<counter<<":";
-        cout<<tempHead->Name<<"\n";
+        cout<<counter<<":"<<tempHead->Name<<"\n";
         tempHead = tempHead->Next; //put the pointer to the next element
-        temp--; counter++;         //reduce the counter
+        temp--; counter++;        //reduce the counter
     }
+    cout<<'\n';
 }
+void List::Search(){
+    Node *tempHead = Head;
+    int var = size;
+    string usename;
+    cout<<"Enter name:"; getline(cin,usename);
+    int volume = usename.size();
+    int counter = 1;
+    int i = 0;
+
+    while (var!=0)
+        {
+            if (usename == tempHead->Name)
+            {
+                cout<<counter<<":"<<tempHead->Name<<endl;
+                tempHead = tempHead->Next;
+                i++;
+            }
+            else
+            tempHead = tempHead->Next;
+            var--; counter++;
+        }
+    if (i == 0)
+        cout<<"Doesn't found!";
+
+}
+
 
 void List:: Ready_List(){ //here I will enter the reading list from external file
     ifstream inFile1("WorkList.txt",ios::in);
@@ -77,7 +104,7 @@ void List:: Ready_List(){ //here I will enter the reading list from external fil
     }
     inFile1.close();
     ifstream inFile("Worklist.txt",ios::in);
-    const int len = 30;
+    const int len = 40;
     const char ch = '\n';
     char mass[len][iter];
     if(!inFile) cout<<"incorrect input";
@@ -104,18 +131,20 @@ void List:: Ready_List(){ //here I will enter the reading list from external fil
 
 int main(){
     List lst;
-    int i;
+    //int i;
 
-    cout<<"How many items will contain your list? Enter a number:";
+    /*cout<<"How many items will contain your list? Enter a number:";
     cin>>i;cin.get();                    //The keyboard buffer is empty symbol, which I removed using cin.get()
     while (i!=0){
         lst.Add();
         i--;
     }
     cout<<"\n\n";
+    //lst.Show();*/
+    lst.Ready_List();
     lst.Show();
-    /*lst.Ready_List();
-    lst.Show();*/
+    lst.Search();
+
     return 0;
 }
 
