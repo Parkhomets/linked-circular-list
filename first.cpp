@@ -3,6 +3,9 @@
 #include <fstream>
 #include <string>
 #include <cstring>
+#include <windows.h>
+#include <vector>
+
 using namespace std;
 
 struct Node{
@@ -20,9 +23,15 @@ public:
     void Add();                     //method to add item
     void Show();            //show all items
     void Ready_List();
-    void Search();
+    void SearchName();
+    void SearchDif();
     int size;                       //the number of elements in the list
 };
+
+class StudentsList : public List{
+
+};
+
 
 List :: ~List(){                    //delete class
     while (size!=0){
@@ -33,11 +42,7 @@ List :: ~List(){                    //delete class
     }
 }
 
-/*
-int List :: Count(){
-    return size;
-}
-*/
+
 
 void List:: Add(){//with each addition, the size of the list increases
     string Name;
@@ -57,6 +62,10 @@ void List:: Add(){//with each addition, the size of the list increases
         Head = Tail = temp;     //the new element becomes the beginning and end, and active, that is the only
     }
 }
+void Fusion(){
+    Node *res = concatenate()
+
+}
 
 void List :: Show(){    //method of displaying list items
     Node *tempHead = Head;      //put the pointer to the first element
@@ -69,11 +78,11 @@ void List :: Show(){    //method of displaying list items
     }
     // cout<<'\n';
 }
-void List::Search(){
+void List::SearchName(){
     Node *tempHead = Head;
     int var = size;
     string usename;
-    cout<<"Enter name:"; getline(cin,usename);
+    cout<<"\nВведите ФИО:"; getline(cin,usename);
     int volume = usename.size();
     int counter = 1;
     int i = 0;
@@ -94,44 +103,33 @@ void List::Search(){
         cout<<"Doesn't found!";
 
 }
+void List :: SearchDif(){
+Node *tempHead = Head;
+    int var = size;
+    string usename;
+    cout<<"\nВведите параметр:"; getline(cin,usename);
+    usename = " " + usename;
 
-/*
-void List:: Ready_List(){ //here I will enter the reading list from external file
-    ifstream inFile1("WorkList.txt",ios::in);
-    int iter = 0;
-    string s;
-    while (inFile1.peek() != EOF)
-    {
-        getline(inFile1, s);
-        iter++;
-    }
-    inFile1.close();
-    ifstream inFile("Worklist.txt",ios::in);
-    const int len = 40;
-    const char ch = '\n';
-    char mass[len][iter];
-    if(!inFile) cout<<"incorrect input";
-    else{
-        for(int r=0; r<iter;r++)
+    int volume = usename.size();
+    int counter = 1;
+    int i = 0;
+
+    while (var!=0)
         {
-            inFile.getline(mass[r],len-1,ch);
-            size++;
-            Node *temp = new Node;
-            temp->Next = Head;
-            temp->Name = mass[r];
-            if (Head!=NULL){
-                Tail->Next = temp;
-                Tail = temp;
+            if (usename == tempHead->Difference)
+            {
+                cout<<counter<<":"<<tempHead->Name<<tempHead->Difference<<endl;
+                tempHead = tempHead->Next;
+                i++;
             }
-            else{
-                Head = Tail = temp;
-            }
+            else
+            tempHead = tempHead->Next;
+            var--; counter++;
         }
-    }
-
-    inFile.close();
+    if (i == 0)
+        cout<<"Doesn't found!";
 }
-*/
+
 void List::Ready_List(){
     string line1, line2;
     ifstream inFile("WorkList.txt",ios::in);
@@ -156,8 +154,12 @@ void List::Ready_List(){
     inFile.close();
 }
 
+
 int main(){
+    vector<int> d;
     List lst;
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
     /*int i;
 
     cout<<"How many items will contain your list? Enter a number:";
@@ -170,7 +172,8 @@ int main(){
     lst.Show();*/
     lst.Ready_List();
     lst.Show();
-    lst.Search();
+    lst.SearchName();
+    lst.SearchDif();
 
     return 0;
 }
