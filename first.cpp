@@ -7,6 +7,7 @@ using namespace std;
 
 struct Node{
     string Name;
+    string Difference;
     Node *Next;
 };
 
@@ -40,12 +41,14 @@ int List :: Count(){
 
 void List:: Add(){//with each addition, the size of the list increases
     string Name;
+    string Difference;
     size++;
-    getline(cin, Name);
+    getline(cin, Name, ';'); getline(cin, Difference);
     //cin>>Name;               //Enter a new element in a temporary variable
     Node *temp = new Node;      //allocate memory for the new list node
     temp->Next = Head;          //short circuit
-    temp->Name = Name;          //the entry of a new element in the active node
+    temp->Name = Name;
+    temp->Difference = Difference;         //the entry of a new element in the active node
     if (Head!=NULL){            //if list is not empty
         Tail->Next = temp;      //put the new node at the end
         Tail = temp;            //Do newly added node active
@@ -60,11 +63,11 @@ void List :: Show(){    //method of displaying list items
     int temp = size;//set up a temporary variable for convenience of output
     int counter = 1;
     while (temp!=0){
-        cout<<counter<<":"<<tempHead->Name<<"\n";
+        cout<<counter<<":"<<tempHead->Name<<" "<<tempHead->Difference<<endl;
         tempHead = tempHead->Next; //put the pointer to the next element
         temp--; counter++;        //reduce the counter
     }
-    cout<<'\n';
+    // cout<<'\n';
 }
 void List::Search(){
     Node *tempHead = Head;
@@ -79,7 +82,7 @@ void List::Search(){
         {
             if (usename == tempHead->Name)
             {
-                cout<<counter<<":"<<tempHead->Name<<endl;
+                cout<<counter<<":"<<tempHead->Name<<tempHead->Difference<<endl;
                 tempHead = tempHead->Next;
                 i++;
             }
@@ -92,7 +95,7 @@ void List::Search(){
 
 }
 
-
+/*
 void List:: Ready_List(){ //here I will enter the reading list from external file
     ifstream inFile1("WorkList.txt",ios::in);
     int iter = 0;
@@ -128,19 +131,43 @@ void List:: Ready_List(){ //here I will enter the reading list from external fil
 
     inFile.close();
 }
+*/
+void List::Ready_List(){
+    string line1, line2;
+    ifstream inFile("WorkList.txt",ios::in);
+    if (inFile.is_open())
+        while (!inFile.eof())
+        {
+            getline(inFile,line1,';');
+            getline(inFile,line2,'\n');
+            size++;
+            Node *temp = new Node;
+            temp->Next = Head;
+            temp->Name = line1;
+            temp->Difference = line2;
+            if (Head!=NULL){
+                Tail->Next = temp;
+                Tail = temp;
+            }
+            else{
+                Head = Tail = temp;
+            }
+        }
+    inFile.close();
+}
 
 int main(){
     List lst;
-    //int i;
+    /*int i;
 
-    /*cout<<"How many items will contain your list? Enter a number:";
+    cout<<"How many items will contain your list? Enter a number:";
     cin>>i;cin.get();                    //The keyboard buffer is empty symbol, which I removed using cin.get()
     while (i!=0){
         lst.Add();
         i--;
     }
     cout<<"\n\n";
-    //lst.Show();*/
+    lst.Show();*/
     lst.Ready_List();
     lst.Show();
     lst.Search();
