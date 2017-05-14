@@ -25,7 +25,7 @@ public:
     void Concatination(List<T> lst);
     void Concat(List <T> lst);
     void Sort();
-    void Division(List<T> lst, List<T> lstt, T petr);
+    void Division(List<T> *lst, List<T> *lstt, T petr);
     int size;
 };
 class Student{
@@ -82,29 +82,9 @@ public:
     void Show();
     void ToDo();
 };
-void Functions :: ToDo(){
-    func();
-}
 
-template <typename T>
-void List <T> :: Concatination(List <T> lst){
-    Node *tempHead = Head;
-    int var = this->size;
-    while (var != 1)
-    {
-        tempHead = tempHead->Next;
-        var--;
-    }
-    tempHead->Next = lst.Head;
-    var = lst.size;
-    while (var != 0)
-    {
-        tempHead = tempHead->Next;
-        var--;
-    }
-    tempHead->Next = this->Head;
-    this->size +=lst.size;
-}
+
+//Шаблонные функции
 template <typename T>
 void List <T> :: Concat(List <T> lst){
     Node *tempHead = Tail;
@@ -113,21 +93,19 @@ void List <T> :: Concat(List <T> lst){
     lst.Tail->Next = tempHead1;
     this->size = this->size + lst.size;
 }
-
 template <typename T>
-void List <T> :: Division(List <T> lst, List <T> lstt, T petr){
+void List <T> :: Division(List <T> *lst, List <T> *lstt, T petr){
     Node *tempHead = Head;
     int var = 0;
     while (var++ < size)
     {
         if (tempHead->element.Ref() == petr.Ref()){
-            lst.Add(tempHead->element);
+            lst->Add(tempHead->element);
         }else{
-            lstt.Add(tempHead->element);
+            lstt->Add(tempHead->element);
         }
         tempHead = tempHead->Next;
     }
-    lst.Show();
     cout << endl;
 }
 template <typename T>
@@ -166,22 +144,6 @@ void List <T> :: Show(){
     }
     cout << endl;
 }
-void Student :: Show(){
-    cout<<surname<<" "<<name<<" "<<patronymic<<" "<<group<<endl;
-}
-void Functions :: Show(){
-    cout << Name << endl;
-}
-string Student :: Ref(){
-    return group;
-}
-void Professors :: Show(){
-    cout<<surname<<" "<<name<<" "<<patronymic<<" "<<subject<<endl;
-}
-string Professors :: Ref(){
-    return subject;
-}
-
 template <typename T>
 int List <T> :: Search(T petr){
     int var = 0;
@@ -242,22 +204,50 @@ void List <T> :: Sort(){
         var1--;
     }
 }
-
-
-void squareFoo(double x){
-    cout << "Это функция извлечения корня.";
+//Функции обычных классов
+void Student :: Show(){
+    cout<<surname<<" "<<name<<" "<<patronymic<<" "<<group<<endl;
+}
+void Functions :: Show(){
+    cout << Name << endl;
+}
+void Professors :: Show(){
+    cout<<surname<<" "<<name<<" "<<patronymic<<" "<<subject<<endl;
+}
+string Professors :: Ref(){
+    return subject;
+}
+string Student :: Ref(){
+    return group;
+}
+void Functions :: ToDo(){
+    func();
+}
+//Это 4 функции, которые я закину в список из функций
+void squareFoo(){
+    double x;
+    cout << "Это функция извлечения корня."<<endl;
+    cout << "Введите число, корень из которого вы хотите извлечь\n->";
+    cin >> x;
     cout << "Корень из" << " " << x << " это " << sqrt(x) << endl;
 }
-void powFoo(double x, double y){
-    cout << "Это Функция возведения в степень.";
+void powFoo(){
+    double x, y;
+    cout << "Это Функция возведения в степень."<<endl;
+    cout << "Введите два числа, причем второе - степень первого\n->";
+    cin >> x >> y;
     cout << x << " в степени " << y << " это "<< pow(x, y) << endl;
 }
-void truncFoo(double x){
-    cout << "Это функция обрезания дробной части. Введите действительное число:";
+void truncFoo(){
+    double x;
+    cout << "Это функция обрезания дробной части. Введите действительное число\n->";
+    cin >> x;
     cout <<"Ваше число " << x << " без дробной части это " << trunc(x)<< endl;
 }
-void expFoo(double x){
-    cout << "Это функция возведения экспоненты в степень.";
+void expFoo(){
+    double x;
+    cout << "Это функция возведения экспоненты в степень.\nВведите показатель экспоненты\n->";
+    cin >> x;
     cout << "Экспонента в степени " << x << " это " <<exp(x) << endl;
 }
 
@@ -385,6 +375,7 @@ void Test_Search(){
     }
 }
 void Test_Division(){
+    cout << "Testing the function Division...\n";
     List <Student> Stud1, Stud2, Stud3, Stud4, Stud5;
     Student petr;
     petr.name = "Иван";
@@ -392,25 +383,36 @@ void Test_Division(){
     petr.surname = "Бухтияров";
     petr.group = "Б16511";
     Stud1.Ready_List("ForTestDivision1.txt");
-    Stud1.Division(Stud2, Stud3, petr);
-    /*Stud2.Show();
-    Stud3.Show();
-    Stud1.Show();*/
+    Stud1.Division(&Stud2, &Stud3, petr);
 
-///!!!!!!!!!!!!
+    Stud4.Ready_List("ForTestDivision2.txt");
+    int p = 0;
+    if (Stud4.Head->element == Stud2.Head->element)
+        p++;
+    if (Stud4.Head->Next->element == Stud2.Head->Next->element)
+        p++;
 
+    Stud5.Ready_List("ForTestDivision3.txt");
+    if (Stud5.Head->element == Stud3.Head->element)
+        p++;
+    if (Stud5.Head->Next->element == Stud3.Head->Next->element)
+        p++;
+    if (Stud5.Head->Next->Next->element == Stud3.Head->Next->Next->element)
+        p++;
+    if (p == 5){
+        cout << "\t\t\t\t\t\tOK";
+    }else{
+        cout << "\t\t\t\t\t\tERROR";
+        cout << "Expected:\n";
+        Stud4.Show();
+        cout << endl;
+        Stud5.Show();
+        cout << "Received:\n";
+        Stud2.Show();
+        cout << endl;
+        Stud3.Show();
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
 int main(){
     List <Student> Stud1, Stud2, Stud3, Stud4, Stud5, Stud6;
     List <Professors> Prof1, Prof2, Prof3, Prof4;
@@ -425,7 +427,7 @@ int main(){
     string ppp;
     cout << "Что вы хотите сделать?\n1-Работать со списками\n2-Провести тест\n";
     cout << "Введите цифру:";
-    cin >> pop;cin.get();+
+    cin >> pop;cin.get();
     if (pop == 2){
         Test_Ready_List();
         Test_Sort();
@@ -434,7 +436,7 @@ int main(){
         Test_Division();
     }else if (pop == 1){
         system("cls");
-        cout << "С какими списками вы хотите работать?\n1-Студенты\n2-Преподаватели\n";
+        cout << "С какими списками вы хотите работать?\n1-Студенты\n2-Преподаватели\n3-Функции\n4-Выход\n";
         cout << "Введите цифру:";
         cin >> pop;cin.get();
         if (pop == 1){
@@ -479,7 +481,7 @@ int main(){
                         cout << "Введите группу, студентов которой вы хотите найти:";
                         cin >> ppp;
                         petr.group = ppp;
-                        Stud1.Division(Stud2, Stud3, petr);
+                        Stud1.Division(&Stud2, &Stud3, petr);
                     }else if (pop == 4){
                         Stud1.Sort();
                     }else{
@@ -516,7 +518,7 @@ int main(){
                     int i;
                     cout<<"Укажите, сколько преподавателей вы хотите добавить:"<<endl;
                     cin>>i;cin.get();
-                    cout << "Вводите в формате Фамилия Имя Отчество Предмет" << endl;/////////////////////////////////////////////////////////////////////////////////////
+                    cout << "Вводите в формате Фамилия Имя Отчество Предмет" << endl;
                     while (i!=0){
                         cin >> mrX;cin.get();
                         Prof1.Add(mrX);
@@ -543,7 +545,7 @@ int main(){
                         cout << "Введите предмет, преподавателей которого вы хотите найти:";
                         cin >> ppp;
                         mrX.subject = ppp;
-                        Prof1.Division(Prof2, Prof3, mrX);
+                        Prof1.Division(&Prof2, &Prof3, mrX);
                     }else if (pop == 4){
                         Prof1.Sort();
                     }else{
@@ -565,91 +567,40 @@ int main(){
                 Prof3.Concat(Prof4);
                 Prof3.Show();
             }
-    }else{
-        cout << "НЕВЕРНЫЙ ВВОД!" << endl;
+        }else if (pop == 3){
+            system("cls");
+            cout << "Был создан список из функций!" << endl;
+            f1.Name = "Извлечение корня";
+            f1.func = squareFoo;
+            f2.Name = "Возведение в степень";
+            f2.func = powFoo;
+            f3.Name = "Обрезание дробной части";
+            f3.func = truncFoo;
+            f4.Name = "Экспонента";
+            f4.func = expFoo;
+            Func.Add(f1);
+            Func.Add(f2);
+            Func.Add(f3);
+            Func.Add(f4);
+            Func.Show();
+            pop = 1;
+            while (pop != 0){
+                cout << endl << "Введите номер функции, которую хотите использовать\n0-Выход\n->";
+                cin >> pop;
+                if (pop == 1){
+                    Func.Head->element.ToDo();
+                }else if (pop == 2){
+                    Func.Head->Next->element.ToDo();
+                }else if (pop == 3){
+                    Func.Head->Next->Next->element.ToDo();
+                }else if (pop == 4){
+                    Func.Head->Next->Next->Next->element.ToDo();
+                }
+            }
+        }else{
+            exit(0);
+        }
     }
-    ///!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-/*
-    int i;
-    cout<<"Укажите
-    , сколько студентов вы хотите добавить:";
-    cin>>i;cin.get();
-    while (i!=0){
-        cin >> petr;
-        Stud.Add(petr);
-        i--;
-    }
-    cout<<"\n\n";
-    Stud.Show();
-
-    cout<<"Укажите, сколько студентов вы хотите добавить:";
-    cin>>i;cin.get();
-    while (i!=0){
-        cin >> petr;
-        Stud2.Add(petr);
-        i-petr.name = "Азамат";
-    petr.surname = "";
-    petr.group = "";
-    petr.patronymic = " ";
-    Stud2.Add(petr);-;
-    }
-    cout<<"\n\n";
-    Stud2.Show();
-    Stud.Concatination(Stud2);
-    Stud.Show();
-    cout << endl;
-
-
-petr.name = "Азамат";
-    petr.surname = "";
-    petr.group = "";
-    petr.patronymic = " ";
-    Stud2.Add(petr);
-    Stud.Ready_List("WorkList.txt");
-    Stud.Show();
-    Stud.Division(Stud3, Stud4);
-    //Stud.Search();
-
-    cout << "\n\n";
-
-    Prof.Ready_List("WorkList2.txt");
-    Prof.Show();
-    Prof.Search();
-    Stud2.Ready_List("WorkList.txt");
-    Stud2.Show();
-
-    Stud.Sort();
-    Stud.Show();
-    Prof.Division(Prof1, Prof2);*/
-
-    /*
-    f1.Name = "Извлечение корня";
-    f1.func = squareFoo;
-    f2.Name = "Возведение в степень";
-    f2.func = powFoo;
-    f3.Name = "Обрезание дробной части";
-    f3.func = truncFoo;
-    f4.Name = "Экспонента";
-    f4.func = expFoo;
-
-
-
-    Func.Add(f1);
-    Func.Add(f2);
-    Func.Add(f3);
-    Func.Add(f4);
-    Func.Show();
-    Func.Head->element.ToDo();
-    Func.Head->Next->element.ToDo();*/
-
-    /*Test_Ready_List();
-    Test_Sort();
-    Test_Search();
-    Test_Division();*/
-
-
     return 0;
-}
 }
 
